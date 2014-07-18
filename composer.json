@@ -1,0 +1,31 @@
+{
+    "name": "bldr-io/remote-block",
+    "description": "Remote Execution Block for Bldr",
+    "require": {
+        "phpseclib/phpseclib": "dev-php5"
+    },
+    "require-dev": {
+        "bldr-io/bldr": "~5.0",
+        "dflydev/embedded-composer": "dev-master",
+        "composer/composer": "dev-master",
+        "symfony/yaml": "~2.5.0"
+    },
+    "scripts": {
+        "post-update-cmd": "Bldr\\Composer\\Script::prepareThirdPartyBlocks"
+    },
+    "autoload": {
+        "psr-4": {
+            "Bldr\\Block\\Remote\\": "src/"
+        }
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Aaron Scherer",
+            "email": "aequasi@gmail.com"
+        },
+        {
+            "name": "Mauricio Walters"
+        }
+    ]
+}
