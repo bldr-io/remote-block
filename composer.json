@@ -10,9 +10,6 @@
         "composer/composer": "dev-master",
         "symfony/yaml": "~2.5.0"
     },
-    "scripts": {
-        "post-autoload-dump": "Bldr\\Composer\\Script::prepareThirdPartyBlocks"
-    },
     "autoload": {
         "psr-4": {
             "Bldr\\Block\\Remote\\": "src/"
