@@ -15,6 +15,9 @@
             "Bldr\\Block\\Remote\\": "src/"
         }
     },
+    "extra": {
+      "block-class": "Bldr\\Block\\Remote\\RemoteBlock"
+    },
     "license": "MIT",
     "authors": [
         {
