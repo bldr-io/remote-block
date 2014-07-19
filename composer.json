@@ -2,7 +2,7 @@
     "name": "bldr-io/remote-block",
     "description": "Remote Execution Block for Bldr",
     "require": {
-        "phpseclib/phpseclib": "dev-php5"
+        "phpseclib/phpseclib": "~0.3.7"
     },
     "require-dev": {
         "bldr-io/bldr": "~5.0",
