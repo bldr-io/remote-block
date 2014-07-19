@@ -11,7 +11,7 @@
         "symfony/yaml": "~2.5.0"
     },
     "scripts": {
-        "post-install-cmd": "Bldr\\Composer\\Script::prepareThirdPartyBlocks"
+        "post-autoload-dump": "Bldr\\Composer\\Script::prepareThirdPartyBlocks"
     },
     "autoload": {
         "psr-4": {
