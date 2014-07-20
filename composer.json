@@ -5,10 +5,9 @@
         "phpseclib/phpseclib": "~0.3.7"
     },
     "require-dev": {
-        "bldr-io/bldr": "~6.1.0@stable",
+        "bldr-io/bldr": "~6.1.0",
         "dflydev/embedded-composer": "dev-master",
-        "composer/composer": "dev-master",
-        "symfony/yaml": "~2.5.0@stable"
+        "composer/composer": "dev-master"
     },
     "autoload": {
         "psr-4": {
@@ -25,7 +24,8 @@
             "email": "aequasi@gmail.com"
         },
         {
-            "name": "Mauricio Walters"
+            "name": "Mauricio Walters",
+            "email": "nvitius@gmail.com"
         }
     ]
 }
