@@ -47,7 +47,7 @@ class Configuration implements ConfigurationInterface
                         ->isRequired()
                     ->end()
                     ->scalarNode('password')
-                        ->info("Also the password for the private rsa key. DO NOT STORE THIS IN CVS")
+                        ->info("Also the password for the private rsa key. DO NOT STORE THIS IN VCS")
                     ->end()
                     ->scalarNode('rsa_key')
                         ->info("Full location to this host's private rsa key file")
