@@ -29,6 +29,7 @@ class Configuration implements ConfigurationInterface
         $rootNode    = $treeBuilder->root('remote');
 
         $rootNode
+            ->addDefaultsIfNotSet()
             ->useAttributeAsKey('name')
             ->prototype('array')
                 ->children()
@@ -42,7 +43,6 @@ class Configuration implements ConfigurationInterface
                         ->isRequired()
                     ->end()
                     ->scalarNode('password')
-                        ->isRequired()
                         ->info("DO NOT STORE THIS IN CVS")
                     ->end()
                     ->scalarNode('privateKey')

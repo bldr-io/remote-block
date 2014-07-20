@@ -5,10 +5,10 @@
         "phpseclib/phpseclib": "~0.3.7"
     },
     "require-dev": {
-        "bldr-io/bldr": "~5.0",
+        "bldr-io/bldr": "~6.1.0@stable",
         "dflydev/embedded-composer": "dev-master",
         "composer/composer": "dev-master",
-        "symfony/yaml": "~2.5.0"
+        "symfony/yaml": "~2.5.0@stable"
     },
     "autoload": {
         "psr-4": {
