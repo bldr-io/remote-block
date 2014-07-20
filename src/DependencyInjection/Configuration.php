@@ -9,7 +9,7 @@
  * with this source code in the file LICENSE
  */
 
-namespace Bldr\Block\Remote;
+namespace Bldr\Block\Remote\DependencyInjection;
 
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
@@ -29,8 +29,10 @@ class Configuration implements ConfigurationInterface
         $rootNode    = $treeBuilder->root('remote');
 
         $rootNode
+            ->addDefaultsIfNotSet()
             ->useAttributeAsKey('name')
             ->prototype('array')
+                ->addDefaultsIfNotSet()
                 ->children()
                     ->scalarNode('hostname')
                         ->isRequired()
@@ -38,15 +40,17 @@ class Configuration implements ConfigurationInterface
                     ->integerNode('port')
                         ->defaultValue(22)
                     ->end()
+                    ->integerNode('timeout')
+                        ->defaultValue(5)
+                    ->end()
                     ->scalarNode('username')
                         ->isRequired()
                     ->end()
                     ->scalarNode('password')
-                        ->isRequired()
-                        ->info("DO NOT STORE THIS IN CVS")
+                        ->info("Also the password for the private rsa key. DO NOT STORE THIS IN CVS")
                     ->end()
-                    ->scalarNode('privateKey')
-                        ->info("Full location to this host's private key file")
+                    ->scalarNode('rsa_key')
+                        ->info("Full location to this host's private rsa key file")
                     ->end()
                 ->end()
             ->end()
@@ -55,4 +59,3 @@ class Configuration implements ConfigurationInterface
         return $treeBuilder;
     }
 }
- 

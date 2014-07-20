@@ -11,8 +11,10 @@
 
 namespace Bldr\Block\Remote;
 
+use Bldr\Block\Remote\DependencyInjection\CompilerPass\RemoteSubscriberCompilerPass;
 use Bldr\DependencyInjection\AbstractBlock;
 use Symfony\Component\DependencyInjection\ContainerBuilder as SymfonyContainerBuilder;
+use Symfony\Component\DependencyInjection\Reference;
 
 /**
  * @author Aaron Scherer <aequasi@gmail.com>
@@ -24,7 +26,15 @@ class RemoteBlock extends AbstractBlock
      */
     protected function getConfigurationClass()
     {
-        return 'Bldr\Block\Remote\Configuration';
+        return 'Bldr\Block\Remote\DependencyInjection\Configuration';
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getCompilerPasses()
+    {
+        return [new RemoteSubscriberCompilerPass()];
     }
 
     /**
@@ -32,10 +42,8 @@ class RemoteBlock extends AbstractBlock
      */
     protected function assemble(array $config, SymfonyContainerBuilder $container)
     {
-        $container->setParameter('bldr.remote.hosts', $config);
-        foreach ($config as $name => $host) {
-            $container->setParameter('bldr.remote.hosts.'.$name, $host);
-        }
+        $this->addService('bldr_remote.event.remote', 'Bldr\Block\Remote\EventSubscriber\RemoteSubscriber')
+            ->addArgument(new Reference('output'))
+            ->addArgument($config);
     }
 }
- 
