@@ -47,4 +47,3 @@ class RemoteBlock extends AbstractBlock
             ->addArgument($config);
     }
 }
- 

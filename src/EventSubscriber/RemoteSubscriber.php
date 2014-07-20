@@ -168,4 +168,3 @@ class RemoteSubscriber implements EventSubscriberInterface
         ];
     }
 }
- 

@@ -27,4 +27,3 @@ class RemoteSubscriberCompilerPass implements CompilerPassInterface
         $container->get('bldr.dispatcher')->addSubscriber($container->get('bldr_remote.event.remote'));
     }
 }
- 
