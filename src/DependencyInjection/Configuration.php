@@ -29,6 +29,7 @@ class Configuration implements ConfigurationInterface
         $rootNode    = $treeBuilder->root('remote');
 
         $rootNode
+            ->addDefaultsIfNotSet()
             ->useAttributeAsKey('name')
             ->prototype('array')
                 ->addDefaultsIfNotSet()
