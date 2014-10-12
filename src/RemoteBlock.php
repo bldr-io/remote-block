@@ -43,7 +43,9 @@ class RemoteBlock extends AbstractBlock
     protected function assemble(array $config, SymfonyContainerBuilder $container)
     {
         $this->addService('bldr_remote.event.remote', 'Bldr\Block\Remote\EventSubscriber\RemoteSubscriber')
+            ->addArgument(new Reference('input'))
             ->addArgument(new Reference('output'))
+            ->addArgument(new Reference('helper_set'))
             ->addArgument($config);
     }
 }

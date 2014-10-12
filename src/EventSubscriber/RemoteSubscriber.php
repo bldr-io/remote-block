@@ -12,7 +12,11 @@
 namespace Bldr\Block\Remote\EventSubscriber;
 
 use Bldr\Event\PreExecuteEvent;
+use Symfony\Component\Console\Helper\HelperSet;
+use Symfony\Component\Console\Helper\QuestionHelper;
+use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Question\Question;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
@@ -20,10 +24,11 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
  */
 class RemoteSubscriber implements EventSubscriberInterface
 {
+
     /**
-     * @var string[] $hosts
+     * @type InputInterface
      */
-    private $hosts;
+    private $input;
 
     /**
      * @var OutputInterface $output
@@ -31,12 +36,27 @@ class RemoteSubscriber implements EventSubscriberInterface
     private $output;
 
     /**
-     * @param stirng[] $hosts
+     * @type HelperSet
      */
-    public function __construct(OutputInterface $output, array $hosts)
+    private $helpers;
+
+    /**
+     * @var string[] $hosts
+     */
+    private $hosts;
+
+    /**
+     * @param InputInterface  $input
+     * @param OutputInterface $output
+     * @param HelperSet       $helpers
+     * @param string[]        $hosts
+     */
+    public function __construct(InputInterface $input, OutputInterface $output, HelperSet $helpers, array $hosts)
     {
-        $this->hosts  = $hosts;
-        $this->output = $output;
+        $this->input   = $input;
+        $this->output  = $output;
+        $this->helpers = $helpers;
+        $this->hosts   = $hosts;
     }
 
     /**
@@ -48,7 +68,7 @@ class RemoteSubscriber implements EventSubscriberInterface
     {
         $event->stopPropagation();
 
-        $remote = $event->getCall()->getOption('remote', false);
+        $remote = $event->getTask()->getOption('remote', false);
         if (!isset($this->hosts[$remote])) {
             throw new \Exception(
                 sprintf(
@@ -61,7 +81,7 @@ class RemoteSubscriber implements EventSubscriberInterface
 
         $ssh    = $this->createSSHHandler($this->hosts[$remote]);
         $output = $ssh->exec($event->getProcessBuilder()->getProcess()->getCommandLine());
-        if ($this->output->isVeryVerbose()) {
+        if ($this->output->getVerbosity() === OutputInterface::VERBOSITY_VERY_VERBOSE) {
             $this->output->writeln(
                 [
                     "<comment>------Remote------</comment>",
@@ -135,10 +155,11 @@ class RemoteSubscriber implements EventSubscriberInterface
         if (empty($config['password'])) {
             if (empty($config['rsa_key'])) {
 
-                if ($this->output->isVerbose()) {
+                if ($this->output->getVerbosity() === OutputInterface::VERBOSITY_VERBOSE) {
                     $this->output->writeln('No password found in config.');
                 }
-                $this->output->writeln(
+
+                $question = new Question(
                     sprintf(
                         "What is your password for %s@%s:%d: ",
                         $config['username'],
@@ -146,8 +167,13 @@ class RemoteSubscriber implements EventSubscriberInterface
                         $config['port']
                     )
                 );
+                $question->setHidden(true);
+                $question->setHiddenFallback(false);
 
-                return fgets(STDIN);
+                /** @type QuestionHelper $q */
+                $q = $this->helpers->get('question');
+
+                return $q->ask($this->input, $this->output, $question);
             }
 
             return '';
