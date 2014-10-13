@@ -11,7 +11,9 @@
 
 namespace Bldr\Block\Remote\EventSubscriber;
 
-use Bldr\Event\PreExecuteEvent;
+use Bldr\Block\Core\Task\AbstractTask;
+use Bldr\Block\Execute\Task\ExecuteTask;
+use Bldr\Event;
 use Symfony\Component\Console\Helper\HelperSet;
 use Symfony\Component\Console\Helper\QuestionHelper;
 use Symfony\Component\Console\Input\InputInterface;
@@ -60,15 +62,20 @@ class RemoteSubscriber implements EventSubscriberInterface
     }
 
     /**
-     * @param PreExecuteEvent $event
+     * @param Event\PreExecuteEvent $event
      *
      * @throws \Exception
      */
-    public function onPreExecute(PreExecuteEvent $event)
+    public function onPreExecute(Event\PreExecuteEvent $event)
     {
+        $task = $event->getTask();
+        if (!($task instanceof AbstractTask)) {
+            return;
+        }
+
         $event->stopPropagation();
 
-        $remote = $event->getTask()->getParameter('remote', false);
+        $remote = $task->getParameter('remote');
         if (!isset($this->hosts[$remote])) {
             throw new \Exception(
                 sprintf(
@@ -183,12 +190,26 @@ class RemoteSubscriber implements EventSubscriberInterface
     }
 
     /**
+     * @param Event\PreInitializeTaskEvent $event
+     */
+    public function onPreInitializeTask(Event\PreInitializeTaskEvent $event)
+    {
+        $task = $event->getTask();
+        if ($task instanceof AbstractTask && $task instanceof ExecuteTask) {
+            $task->addParameter('remote', false, 'Remote server to run');
+        }
+    }
+
+    /**
      * {@inheritDoc}
      */
     public static function getSubscribedEvents()
     {
         return [
-            'bldr.event.execute.before' => [
+            Event::PRE_INITIALIZE_TASK => [
+                ['onPreInitializeTask', 0]
+            ],
+            Event::PRE_EXECUTE => [
                 ['onPreExecute', 0]
             ]
         ];
