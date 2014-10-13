@@ -68,7 +68,7 @@ class RemoteSubscriber implements EventSubscriberInterface
     {
         $event->stopPropagation();
 
-        $remote = $event->getTask()->getParameter('remote');
+        $remote = $event->getTask()->getParameter('remote', false);
         if (!isset($this->hosts[$remote])) {
             throw new \Exception(
                 sprintf(
