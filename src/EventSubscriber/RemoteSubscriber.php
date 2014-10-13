@@ -69,9 +69,16 @@ class RemoteSubscriber implements EventSubscriberInterface
     public function onPreExecute(Event\PreExecuteEvent $event)
     {
         $task = $event->getTask();
-        if (!($task instanceof AbstractTask)) {
+
+        if (!($task instanceof AbstractTask) || !($task instanceof ExecuteTask)) {
             return;
         }
+
+        if (!$task->hasParameter('remote')) {
+            return;
+        }
+
+
 
         $event->stopPropagation();
 
